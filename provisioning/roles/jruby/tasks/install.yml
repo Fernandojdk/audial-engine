@@ -1,0 +1,27 @@
+- name: download jruby
+  get_url: url=https://s3.amazonaws.com/jruby.org/downloads/1.7.19/jruby-bin-1.7.19.tar.gz dest=/tmp/jruby.tar.gz sha256sum=8e34f8a94bb6abedc0f6f9d0cc174b4fadc78a50fb44804c16f19bf8f2586d5d.
+
+- name: extract jruby
+  unarchive: src=/tmp/jruby.tar.gz dest=/opt copy=no creates=/opt/jruby-1.7.19
+
+- name: symlink jruby
+  file: src=/opt/jruby-1.7.19 dest=/opt/jruby state=link
+
+- name: add jruby to path
+  lineinfile: >
+    dest=/etc/environment
+    state=present
+    backrefs=yes
+    regexp='PATH=(["]*)((?!.*?/opt/jruby/bin).*?)(["]*)$'
+    line="PATH=\1\2:/opt/jruby/bin\3"
+
+- name: check if bundler installed
+  command: /opt/jruby/bin/jruby -S gem query -i -n bundler
+  register: bundler_installed
+  ignore_errors: true
+  changed_when: false
+
+- name: install bundler
+  command: /opt/jruby/bin/jruby -S gem install --conservative bundler
+  sudo: true
+  when: bundler_installed|failed

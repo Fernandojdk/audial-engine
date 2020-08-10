@@ -1,0 +1,73 @@
+[general]
+context = adhearsion
+allowguest = yes
+allowoverlap = no
+allowtransfer = no
+bindport = 5060
+bindaddr = 0.0.0.0
+localnet = 192.168.1.0/255.255.255.0
+tcpenable = yes
+tcpbindaddr = 0.0.0.0
+srvlookup = yes
+pedantic = yes
+tos_sip = cs3
+tos_audio = ef
+tos_video = af41
+maxexpiry = 3600
+minexpirey =
+defaultexpiry = 120
+t1min = 100
+notifymimetype = text/plain
+checkmwi = 10
+buggymwi = no
+vmexten = voicemail
+disallow = all
+allow = ulaw
+allow = gsm
+allow = ilbc
+allow = speex
+mohinterpret = default
+mohsuggest = default
+language =
+relaxdtmf = yes
+trustpid =
+sendrpid = yes
+progressinband = never
+useragent = Asterisk with Adhearsion
+promiscredir = no
+usereqphone = no
+dtmfmode = rfc2833
+compactheaders = yes
+videosupport = yes
+maxcallbitrate = 384
+callevents = no
+alwaysauthreject = yes
+g726nonstandard = yes
+matchexterniplocally = yes
+regcontext = sipregistrations
+rtptimeout = 60
+rtpholdtimeout = 300
+rtpkeepalive = 60
+sipdebug = yes
+recordhistory = yes
+dumphistory = yes
+allowsubscribe = no
+subscribecontext = default
+notifyringing = yes
+notifyhold = yes
+limitonpeers = yes
+t38pt_udptl = yes
+
+externip = {{ ansible_eth0.ipv4.address }}  ; Address that we're going to put in outbound SIP
+
+[authentication]
+
+{% for user in asterisk.users %}
+[{{user.username}}]
+defaultuser={{user.username}}
+secret={{user.password}}
+type=friend
+callerid="{{user.full_name}} <{{user.username}}>"
+host=dynamic
+context={{user.context}}
+{% endfor %}

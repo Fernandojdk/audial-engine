@@ -1,0 +1,18 @@
+- name: install JRE
+  apt: name=openjdk-7-jre-headless state=latest update_cache=yes
+
+- name: install jruby
+  include: install.yml
+
+- name: install git
+  apt: name=git state=present
+
+- name: check if gems need to be installed
+  command: /opt/jruby/bin/jruby -S bundle check
+  args:
+    chdir: /srv/tfdialer_ahn
+  sudo: false
+  register: gems_installed
+  ignore_errors: true
+  changed_when: false
+

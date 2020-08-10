@@ -1,0 +1,7 @@
+This code remains property of Lloyd Hughes who has allowed Teleforge to temporarily utilize the code in their PBX systems, until such a time as he feels fit to remove/suspend usage rights or the conditions of sale are finalized.
+
+Until such a point the following restrictions apply:
+	- No changes may be made without the supervision of the owner
+	- Any changes made remain property of the owner
+	- The software may not be used to generate additional income for Teleforge until conditions of sale are finalized
+	- The software may not be licensed to other parties without the written permission of the owner

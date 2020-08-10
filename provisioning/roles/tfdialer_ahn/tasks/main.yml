@@ -1,0 +1,9 @@
+- name: create Punchblock recording directory
+  file: path=/var/punchblock/record owner=asterisk group=asterisk mode=0755 state=directory
+
+- name: install tfdialer gems
+  command: /opt/jruby/bin/jruby -S bundle
+  args:
+    chdir: /srv/tfdialer_ahn
+  sudo: false
+  when: gems_installed|failed

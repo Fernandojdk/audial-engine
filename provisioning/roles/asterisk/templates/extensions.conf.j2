@@ -1,0 +1,53 @@
+[general]
+static=yes
+writeprotect=no
+clearglobalvars=no
+
+[globals]
+CONSOLE=Console/dsp   ; Console interface for demo
+IAXINFO=guest         ; IAXtel username/password
+TRUNK=Zap/G2          ; Trunk interface
+TRUNKMSD=1            ; MSD digits to strip (usually 1 or 0)
+
+[default]
+exten => s,1,Set(CALLERID(name)=${DB(cidname/${CALLERID(num)})})
+{% if asterisk.users[0] %}
+exten => s,n,Dial(SIP/{{asterisk.users[0].username}}, 10)
+{% endif %}
+exten => s,n, Hangup
+{% if asterisk.users[0] %}
+exten => {{asterisk.users[0].username}}, 1, Dial(SIP/{{asterisk.users[0].username}}, 10)
+{% endif %}
+
+[outbound]
+include => seven-digit
+include => local-devices
+include => tollfree
+include => dial-uri
+
+[local-devices]
+{% for user in asterisk.users %}
+exten => {{user.extension}}, 1, Dial(SIP/{{user.username}}, 10)
+{% endfor %}
+
+[tollfree]
+exten => _411, 1, Dial(SIP/18004664411@proxy.ideasip.com,60)
+exten => _1800NXXXXXX,1,Dial(SIP/${EXTEN}@proxy.ideasip.com,60)
+exten => _1888NXXXXXX,1,Dial(SIP/${EXTEN}@proxy.ideasip.com,60)
+exten => _1877NXXXXXX,1,Dial(SIP/${EXTEN}@proxy.ideasip.com,60)
+exten => _1866NXXXXXX,1,Dial(SIP/${EXTEN}@proxy.ideasip.com,60)
+
+[seven-digit]
+exten => _NXXXXXX,1,Set(CALLERID(dnid)=1512${CALLERID(dnid)})
+exten => _NXXXXXX,n,Goto(1512${EXTEN},1)
+exten => _NXXNXXXXXX,1,Set(CALLERID(dnid)=1${CALLERID(dnid)})
+exten => _NXXNXXXXXX,n,Goto(1${EXTEN},1)
+
+[dial-uri]
+exten => _[a-z].,1,Dial(SIP/${EXTEN}@${SIPDOMAIN},120,tr)
+exten => _[A-Z].,1,Dial(SIP/${EXTEN}@${SIPDOMAIN},120,tr)
+exten => _X.,1,Dial(SIP/${EXTEN}@${SIPDOMAIN},120,tr)
+
+[adhearsion-redirect]
+[adhearsion]
+exten => _.,1,AGI(agi:async)

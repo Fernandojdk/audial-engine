@@ -1,0 +1,17 @@
+- name: install Asterisk
+  apt: name=asterisk state=latest update_cache=yes
+
+- name: create extensions.conf
+  template: src=extensions.conf.j2 dest=/etc/asterisk/extensions.conf owner=asterisk group=asterisk mode=0640
+  notify:
+    - restart asterisk
+
+- name: create manager.conf
+  template: src=manager.conf.j2 dest=/etc/asterisk/manager.conf owner=asterisk group=asterisk mode=0640
+  notify:
+    - restart asterisk
+
+- name: create sip.conf
+  template: src=sip.conf.j2 dest=/etc/asterisk/sip.conf owner=asterisk group=asterisk mode=0640
+  notify:
+    - restart asterisk

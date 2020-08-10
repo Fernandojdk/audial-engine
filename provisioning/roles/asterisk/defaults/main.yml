@@ -1,0 +1,15 @@
+asterisk:
+  manager:
+    username: adhearsion
+    password: adhearsion
+  users:
+    - username: dialler
+      password: dialler
+      extension: 100
+      full_name: Dialler
+      context: adhearsion
+    - username: billing
+      password: billing
+      extension: 200
+      full_name: Billing
+      context: adhearsion

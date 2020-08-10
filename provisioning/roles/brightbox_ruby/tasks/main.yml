@@ -1,0 +1,11 @@
+- name: install Brightbox APT source
+  apt_repository: repo=ppa:brightbox/ruby-ng
+
+- name: install Ruby 2.2
+  apt: name=ruby2.2
+
+- name: install ruby-switch
+  apt: name=ruby-switch
+
+- name: use Ruby 2.2 by default
+  command: ruby-switch --set ruby2.2

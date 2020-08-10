@@ -1,0 +1,10 @@
+- hosts: all
+  sudo: true
+  tasks:
+    - name: install redis
+      apt: name=redis-server state=present
+  roles: 
+    - role: asterisk
+    - role: jruby
+    - role: brightbox_ruby
+    - role: tfdialer_ahn

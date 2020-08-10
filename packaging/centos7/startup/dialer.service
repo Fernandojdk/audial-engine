@@ -1,0 +1,9 @@
+[Unit]
+Description=Job that runs the dialer daemon
+
+[Service]
+Type=simple
+ExecStart=/usr/bin/dialer run ahn
+
+[Install]
+WantedBy=multi-user.target
